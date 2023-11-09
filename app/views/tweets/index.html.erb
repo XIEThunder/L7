@@ -1,0 +1,32 @@
+<% @tweets.each do |e| %>
+<p>
+  <%= e.message %>
+  
+  <% if current_user %>
+    <%= link_to "削除", tweet_path(e), data: { "turbo-method": :delete } %>
+    <% if e.liked?(current_user) %>
+      <%= link_to 'いいね削除', like_path(e), data: { "turbo-method": :delete }, method: :delete %>
+    <% else %>
+      <%= link_to 'いいね', likes_path(tweet_id: e.id), data: { "turbo-method": :post } %>
+    <% end %>
+  <% end %>
+</p>
+<% end %>
+
+<hr>
+<% if current_user %>
+  <%= form_for @tweet, url: {action: :create} do |f| %>
+    <%= f.label :message, 'message' %>
+    <%= f.text_field :message %>
+    <%= f.submit 'ツイート' %>
+  <% end %>
+<% end %>
+<hr>
+
+<% if current_user %>
+  <p><%= link_to "ログアウト", top_logout_path %></p>
+<% else %>
+  <p><%= link_to "ログイン", top_main_path %></p>
+<% end %>
+
+<p><%= link_to "ユーザ一覧", users_path %></p>
